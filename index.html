@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chúc mừng sinh nhật Duy Khánh!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fafafa;
+      color: #111;
+      text-align: center;
+      padding: 30px 15px;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      opacity: 0.85;
+    }
+
+    .wish-text {
+      font-size: 18px;
+      margin-bottom: 10px;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    .signature {
+      font-size: 18px;
+      font-style: italic;
+      margin-bottom: 25px;
+      opacity: 0.85;
+    }
+
+    #music-btn {
+      padding: 12px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #ffca28;
+      color: #000;
+      font-weight: 600;
+      margin-bottom: 25px;
+    }
+
+    .content {
+      max-width: 780px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    canvas {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="effects"></canvas>
+
+<div class="content">
+  <h1>🎉 Chúc mừng sinh nhật Duy Khánh! 🎂</h1>
+  <h2>Chúc bạn thêm tuổi mới rực rỡ, bình an và thật nhiều may mắn!</h2>
+
+  <!-- Lời chúc -->
+  <div class="wish-text">
+    Chúc Khánh tuổi mới luôn tràn đầy năng lượng tích cực và sự chân thành vốn có. 
+    Mong rằng cuộc sống sẽ đem đến cho Khánh nhiều cơ hội tốt, những mối quan hệ đáng quý, 
+    những trải nghiệm mới mẻ và những thành tựu khiến bản thân tự hào. 
+    Dù con đường phía trước có khó đến đâu thì cứ vững tin và cố gắng, vì những điều tốt đẹp nhất luôn dành cho người không bỏ cuộc. 🌻
+  </div>
+
+  <div class="signature">— Thân tặng từ Gia Vĩ</div>
+
+  <!-- Nút bật nhạc -->
+  <button id="music-btn">🎵 Bật nhạc</button>
+
+  <!-- Hình ảnh qua Instagram embed -->
+  <div style="margin-top: 20px;">
+    <blockquote class="instagram-media"
+      data-instgrm-captioned
+      data-instgrm-permalink="https://www.instagram.com/p/DUDYq_1AU_4/"
+      data-instgrm-version="14"
+      style="background:#FFFFFF; border:0; border-radius:3px;
+      box-shadow:0 0 1px rgba(0,0,0,0.5),0 1px 10px rgba(0,0,0,0.15);
+      margin: 0 auto; max-width:540px; min-width:326px; padding:0;">
+    </blockquote>
+  </div>
+</div>
+
+<script async src="//www.instagram.com/embed.js"></script>
+
+<!-- Nhạc YouTube ẩn -->
+<iframe id="yt-music" width="0" height="0"
+  src="https://www.youtube.com/embed/LIKOvbJ-DZg?playlist=LIKOvbJ-DZg&loop=1"
+  frameborder="0"
+  allow="autoplay; encrypted-media">
+</iframe>
+
+<script>
+  const btn = document.getElementById("music-btn");
+  btn.onclick = () => {
+    const frame = document.getElementById("yt-music");
+    frame.src += "&autoplay=1";
+    btn.innerText = "🎶 Đang phát: Vết Thương - Fishy";
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+  };
+</script>
+
+<script>
+  const canvas = document.getElementById("effects");
+  const ctx = canvas.getContext("2d");
+
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+
+  const petals = [];
+  const particles = [];
+
+  function random(min,max){return Math.random()*(max-min)+min;}
+
+  // Petals 🌸
+  for(let i=0;i<20;i++){
+    petals.push({
+      x: random(0,W),
+      y: random(-H,0),
+      size: random(14,24),
+      speed: random(0.5,1.5),
+      drift: random(-0.5,0.5),
+      rotate: random(0,Math.PI*2)
+    });
+  }
+
+  // Particles ✨
+  for(let i=0;i<50;i++){
+    particles.push({
+      x: random(0,W),
+      y: random(0,H),
+      alpha: random(0.4,1),
+      size: random(1,3),
+      speed: random(0.2,0.6)
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    petals.forEach(p=>{
+      p.y += p.speed;
+      p.x += p.drift;
+      p.rotate += 0.01;
+      if(p.y > H) {p.y = -20; p.x=random(0,W);}
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rotate);
+      ctx.fillStyle = "#f7b2d9";
+      ctx.beginPath();
+      ctx.ellipse(0,0,p.size, p.size/2, Math.PI/4,0,Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    particles.forEach(pt=>{
+      pt.y -= pt.speed;
+      if(pt.y < 0){pt.y = H;}
+      ctx.fillStyle = `rgba(255,255,255,${pt.alpha})`;
+      ctx.beginPath();
+      ctx.arc(pt.x,pt.y,pt.size,0,Math.PI*2);
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  window.addEventListener("resize",()=>{
+    W = canvas.width = innerWidth;
+    H = canvas.height = innerHeight;
+  });
+</script>
+
+</body>
+</html>
